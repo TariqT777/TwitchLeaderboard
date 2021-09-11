@@ -4,7 +4,7 @@ server = 'irc.chat.twitch.tv'
 port = 6667
 nickname = 'doctor_remarkable'
 token = 'oauth:qai92v51z01253epp7cpacy833uljy'
-channel = '#wildez'
+channel = '#griff'
 
 
 
@@ -30,14 +30,16 @@ def joinchat():
         readbuffer_join = sock.recv(1024)
         readbuffer_join = readbuffer_join.decode()
         for line in readbuffer_join.split("\n"):
-            name = str(line[1:10])
-            if name == 'tmi.twitc' or '':
-                break
+            #print(line)
+            userName = line.split("!",1)
+            name = userName[0]
+            if "tmi.twitch" in name or name == ':doctor_remarkable' or name == '':
+                continue
             if name in dictOfNames:
                 dictOfNames[name] += 1
             else:
                 dictOfNames[name] = 1
-        print(dictOfNames)    
+        print(dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True)))
            
 
 joinchat()
