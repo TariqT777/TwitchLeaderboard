@@ -1,22 +1,48 @@
-from flask import Flask
+from flask import Flask,make_response,request, render_template
 import socket
 from types import resolve_bases
 server = 'irc.chat.twitch.tv'
 port = 6667
 nickname = 'doctor_remarkable'
 token = 'oauth:qai92v51z01253epp7cpacy833uljy'
-channel = '#swotch116'
+channel = '#swehyt'
 
 app = Flask(__name__)
 @app.route('/')
+
 def Index():
-    return "<h1>Hello Flask App</h1>"
+    
+    sock = socket.socket()
+    sock.connect((server,port))
+    sock.send(f"PASS {token}\n".encode('utf-8'))
+    sock.send(f"NICK {nickname}\n".encode('utf-8'))
+    sock.send(f"JOIN {channel}\n".encode('utf-8'))
+    
+    dictOfNames = {}
+    Loading = True
+    printedDictionary = "hi"
+    '''while Loading:
+        readbuffer_join = sock.recv(1024)
+        readbuffer_join = readbuffer_join.decode()
+        for line in readbuffer_join.split("\n"):
+            #print(line)
+            userName = line.split("!",1)
+            name = userName[0]
+            if "tmi.twitch" in name or name == ':doctor_remarkable' or name == '':
+                continue
+            if name in dictOfNames:
+                dictOfNames[name] += 1
+            else:
+                dictOfNames[name] = 1
+        # dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True))
+'''    
+    return render_template('index.html', data = printedDictionary)
 
 if __name__ == '__main__':
     app.run(debug=True)
 
 
-
+'''
 sock = socket.socket()
 sock.connect((server,port))
 
@@ -50,6 +76,8 @@ def joinchat():
            
 
 joinchat()
+'''
+
 
 '''
         for line in readbuffer_join.split("/n"):
