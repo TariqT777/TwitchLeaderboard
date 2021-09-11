@@ -7,7 +7,13 @@ nickname = 'doctor_remarkable'
 token = 'oauth:qai92v51z01253epp7cpacy833uljy'
 channel = '#swotch116'
 
+app = Flask(__name__)
+@app.route('/')
+def Index():
+    return "<h1>Hello Flask App</h1>"
 
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 
