@@ -1,10 +1,11 @@
+from flask import Flask
 import socket
 from types import resolve_bases
 server = 'irc.chat.twitch.tv'
 port = 6667
 nickname = 'doctor_remarkable'
 token = 'oauth:qai92v51z01253epp7cpacy833uljy'
-channel = '#griff'
+channel = '#swotch116'
 
 
 
