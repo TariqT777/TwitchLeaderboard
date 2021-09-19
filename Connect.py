@@ -1,4 +1,5 @@
 from flask import Flask,make_response,request, render_template
+from flask_socketio import SocketIO
 import socket
 from types import resolve_bases
 server = 'irc.chat.twitch.tv'
@@ -8,6 +9,9 @@ token = 'oauth:qai92v51z01253epp7cpacy833uljy'
 channel = '#swehyt'
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'mysecret'
+socketio = SocketIO(app)
+
 @app.route('/')
 
 def Index():
@@ -34,9 +38,13 @@ def Index():
                 dictOfNames[name] += 1
             else:
                 dictOfNames[name] = 1
-        # dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True))
+        dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True))
 '''    
     return render_template('index.html', data = printedDictionary)
+
+@socketio.on('message')
+def hangleMessage(msg):
+    print('Message:' + msg)
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -47,7 +55,8 @@ def internal_server_error(e):
     return render_template('500.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app)
+    #app.run(debug=True)
 
 
 '''
