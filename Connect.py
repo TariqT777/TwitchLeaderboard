@@ -1,16 +1,22 @@
 from flask import Flask,make_response,request, render_template
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO,send
 import socket
 from types import resolve_bases
 server = 'irc.chat.twitch.tv'
 port = 6667
 nickname = 'doctor_remarkable'
 token = 'oauth:qai92v51z01253epp7cpacy833uljy'
-channel = '#swehyt'
+channel = '#jay3'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
 socketio = SocketIO(app)
+
+
+@socketio.on('message')
+def handleMessage(msg):
+    print('Message: ' + msg)
+    send(msg, broadcast = True)
 
 @app.route('/')
 
@@ -42,9 +48,7 @@ def Index():
 '''    
     return render_template('index.html', data = printedDictionary)
 
-@socketio.on('message')
-def hangleMessage(msg):
-    print('Message:' + msg)
+
 
 @app.errorhandler(404)
 def page_not_found(e):
