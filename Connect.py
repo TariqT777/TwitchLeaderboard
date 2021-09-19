@@ -12,26 +12,24 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
 socketio = SocketIO(app)
 
+sock = socket.socket()
+sock.connect((server,port))
 
-@socketio.on('message')
-def handleMessage(msg):
-    print('Message: ' + msg)
-    send(msg, broadcast = True)
+sock.send(f"PASS {token}\n".encode('utf-8'))
+sock.send(f"NICK {nickname}\n".encode('utf-8'))
+sock.send(f"JOIN {channel}\n".encode('utf-8'))
 
-@app.route('/')
 
-def Index():
-    
-    sock = socket.socket()
-    sock.connect((server,port))
-    sock.send(f"PASS {token}\n".encode('utf-8'))
-    sock.send(f"NICK {nickname}\n".encode('utf-8'))
-    sock.send(f"JOIN {channel}\n".encode('utf-8'))
-    
+#resp = sock.recv(4096).decode('utf-8')
+#resp = sock.read(4096).decode('utf-8')
+#print(resp)
+
+
+def joinchat():
     dictOfNames = {}
+    dataToReturn = []
     Loading = True
-    printedDictionary = "hi"
-    '''while Loading:
+    while Loading:
         readbuffer_join = sock.recv(1024)
         readbuffer_join = readbuffer_join.decode()
         for line in readbuffer_join.split("\n"):
@@ -42,11 +40,27 @@ def Index():
                 continue
             if name in dictOfNames:
                 dictOfNames[name] += 1
-            else:
+            elif name not in dictOfNames:
                 dictOfNames[name] = 1
-        dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True))
-'''    
-    return render_template('index.html', data = printedDictionary)
+            if len(dictOfNames) == 10:
+                for key in dictOfNames:
+                    dataToReturn.append(key)    
+                return dataToReturn
+        #print(dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True)))
+
+winner = joinchat()
+
+@socketio.on('message')
+def handleMessage(msg):
+    print('Message: ' + msg)
+    send(msg, broadcast = True)
+
+@app.route('/')
+
+def Index():
+    printedDictionary = "hi"
+ 
+    return render_template('index.html', data = winner)
 
 
 
@@ -63,47 +77,14 @@ if __name__ == '__main__':
     #app.run(debug=True)
 
 
+
+     
+
+#joinchat()
 '''
-sock = socket.socket()
-sock.connect((server,port))
-
-sock.send(f"PASS {token}\n".encode('utf-8'))
-sock.send(f"NICK {nickname}\n".encode('utf-8'))
-sock.send(f"JOIN {channel}\n".encode('utf-8'))
-
-
-#resp = sock.recv(4096).decode('utf-8')
-#resp = sock.read(4096).decode('utf-8')
-#print(resp)
-
-
-def joinchat():
-    dictOfNames = {}
-    Loading = True
-    while Loading:
-        readbuffer_join = sock.recv(1024)
-        readbuffer_join = readbuffer_join.decode()
-        for line in readbuffer_join.split("\n"):
-            #print(line)
-            userName = line.split("!",1)
-            name = userName[0]
-            if "tmi.twitch" in name or name == ':doctor_remarkable' or name == '':
-                continue
-            if name in dictOfNames:
-                dictOfNames[name] += 1
-            else:
-                dictOfNames[name] = 1
-        print(dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True)))
-           
-
-joinchat()
-'''
-
-
-'''
-        for line in readbuffer_join.split("/n"):
-            print(line)
-            Loading = loadingComplete(line)
+for line in readbuffer_join.split("/n"):
+    print(line)
+    Loading = loadingComplete(line)
 
 def loadingComplete(line):
     if ("End of /NAMES list" in line):
