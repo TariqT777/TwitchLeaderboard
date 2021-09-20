@@ -26,7 +26,7 @@ sock.send(f"JOIN {channel}\n".encode('utf-8'))
 
 dictOfNames = {}
 def joinchat():
-    
+    dictEntries = 0
     dataToReturn = []
     Loading = True
     while Loading:
@@ -36,7 +36,8 @@ def joinchat():
             #print(line)
             userName = line.split("!",1)
             name = userName[0]
-            if "tmi.twitch" in name or name == ':doctor_remarkable' or name == '':
+            if "tmi.twitch" in name or name == ':doctor_remarkable' or name == '' or 'bot' in name: 
+                # Taking 'bot' out of results may cause bugs for real people that have the letters 'bot' in their name in that letter order, but it's rare and prevents a streamer's bots from skewing results.
                 continue
             if name in dictOfNames:
                 dictOfNames[name] += 1
@@ -45,10 +46,14 @@ def joinchat():
             if len(dictOfNames) >= 1:
                 sortDict = dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True))
                 nameItems = sortDict.items()
-                yield list(nameItems)[0:10]
+                if dictEntries % 4 == 0: #This allows more entries to be stored in dictionary before printing to the client's screen.
+                   # This yield is giving data to display one entry into the dictionary at a time. For fast chats (i.e chats with a lot of people talking at one time, yield only printing one entry at a time become increasingly slow and less accurate to real time.)
+                    yield list(nameItems)[0:10] 
+                dictEntries += 1
         #print(dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True)))
 
 winner = joinchat()
+'''
 def display():
     while winner:
         test = next(winner)
@@ -56,15 +61,23 @@ def display():
         yield test
 
 dataDisplay = display()
+'''
+'''
+@socketio.on('connection')
+def printData(data):
+    print("Top chatters are:",next(dataDisplay))
+    send(data, broadcast = True)
+'''
 @app.route('/')
 def Index():
     printedDictionary = "hi"
-    return render_template('index.html', data = next(dataDisplay))    
+    return render_template('index.html', data = next(winner))    
 
 @socketio.on('message')
 def handleMessage(msg):
     print('Message: ' + msg)
     send(msg, broadcast = True)
+
 
 @app.errorhandler(404)
 def page_not_found(e):
