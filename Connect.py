@@ -6,7 +6,7 @@ server = 'irc.chat.twitch.tv'
 port = 6667
 nickname = 'doctor_remarkable'
 token = 'oauth:qai92v51z01253epp7cpacy833uljy'
-channel = '#ralph'
+channel = '#october'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
@@ -45,18 +45,21 @@ def joinchat():
             if len(dictOfNames) >= 1:
                 sortDict = dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True))
                 nameItems = sortDict.items()
-                yield list(nameItems)[0:10]
+                yield list(nameItems)[0:3]
         #print(dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True)))
 
 winner = joinchat()
+def display():
+    while winner:
+        test = next(winner)
+        print(test)
+        yield test
 
-while winner:
-    print(next(winner))
-    
+dataDisplay = display()
 @app.route('/')
 def Index():
     printedDictionary = "hi"
-    return render_template('index.html', data = winner)    
+    return render_template('index.html', data = next(dataDisplay))    
 
 @socketio.on('message')
 def handleMessage(msg):
