@@ -45,7 +45,7 @@ def joinchat():
             if len(dictOfNames) >= 1:
                 sortDict = dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True))
                 nameItems = sortDict.items()
-                yield list(nameItems)[0:3]
+                yield list(nameItems)[0:7]
         #print(dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True)))
 
 winner = joinchat()
