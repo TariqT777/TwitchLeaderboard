@@ -6,7 +6,7 @@ server = 'irc.chat.twitch.tv'
 port = 6667
 nickname = 'doctor_remarkable'
 token = 'oauth:qai92v51z01253epp7cpacy833uljy'
-channel = '#jay3'
+channel = '#ralph'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
@@ -24,9 +24,9 @@ sock.send(f"JOIN {channel}\n".encode('utf-8'))
 #resp = sock.read(4096).decode('utf-8')
 #print(resp)
 
-
+dictOfNames = {}
 def joinchat():
-    dictOfNames = {}
+    
     dataToReturn = []
     Loading = True
     while Loading:
@@ -42,27 +42,26 @@ def joinchat():
                 dictOfNames[name] += 1
             elif name not in dictOfNames:
                 dictOfNames[name] = 1
-            if len(dictOfNames) == 10:
-                for key in dictOfNames:
-                    dataToReturn.append(key)    
-                return dataToReturn
+            if len(dictOfNames) >= 1:
+                sortDict = dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True))
+                nameItems = sortDict.items()
+                yield list(nameItems)[0:10]
         #print(dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True)))
 
 winner = joinchat()
+
+while winner:
+    print(next(winner))
+    
+@app.route('/')
+def Index():
+    printedDictionary = "hi"
+    return render_template('index.html', data = winner)    
 
 @socketio.on('message')
 def handleMessage(msg):
     print('Message: ' + msg)
     send(msg, broadcast = True)
-
-@app.route('/')
-
-def Index():
-    printedDictionary = "hi"
- 
-    return render_template('index.html', data = winner)
-
-
 
 @app.errorhandler(404)
 def page_not_found(e):
