@@ -6,7 +6,7 @@ server = 'irc.chat.twitch.tv'
 port = 6667
 nickname = 'doctor_remarkable'
 token = 'oauth:qai92v51z01253epp7cpacy833uljy'
-channel = '#jay3'
+channel = '#thejrm_'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
@@ -36,7 +36,7 @@ def joinchat():
             #print(line)
             userName = line.split("!",1)
             name = userName[0]
-            if "tmi.twitch" in name or name == ':doctor_remarkable' or name == '' or 'bot' in name: 
+            if "tmi.twitch" in name or name == ':doctor_remarkable' or name == '' or name == ':streamelements' or 'bot' in name: 
                 # Taking 'bot' out of results may cause bugs for real people that have the letters 'bot' in their name in that letter order, but it's rare and prevents a streamer's bots from skewing results.
                 continue
             if name in dictOfNames:

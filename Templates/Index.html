@@ -2,21 +2,22 @@
 
 {%block title%} Home {% endblock %}
 
+
 {% block body %}
 
 <div class = "container">
     <h1>Twitch Chat Leaderboard for : {{channelName}}</h1>
-<!--
-    <body> 
-        <ul> 
+    <!-- <h2> {{data}} </h2> -->
+
+
+        <ol><h3> 
         {% for user in data %} 
-        <li><a href="#">{{ user }}</a></li> 
+        <li>{{ user }}</li> 
         {% endfor %} 
-        </ul> 
-</body>
-#This block of code is going to separate the people and place them in order down the page, i.e. more like a real leaderboard.
+        </h3></ol> 
+<!-- This block of code is going to separate the people and place them in order down the page, i.e. more like a real leaderboard.
 -->
-    <h2> {{data}} </h2>
+    
     
 
 </div>
