@@ -5,8 +5,17 @@
 {% block body %}
 
 <div class = "container">
-    <h1>Twitch Chat Leaderboard for : ...</h1>
-
+    <h1>Twitch Chat Leaderboard for : {{channelName}}</h1>
+<!--
+    <body> 
+        <ul> 
+        {% for user in data %} 
+        <li><a href="#">{{ user }}</a></li> 
+        {% endfor %} 
+        </ul> 
+</body>
+#This block of code is going to separate the people and place them in order down the page, i.e. more like a real leaderboard.
+-->
     <h2> {{data}} </h2>
     
 

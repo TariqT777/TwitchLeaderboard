@@ -70,8 +70,9 @@ def printData(data):
 '''
 @app.route('/')
 def Index():
-    printedDictionary = "hi"
-    return render_template('index.html', data = next(winner))    
+    return render_template('index.html', channelName = channel, data = next(winner)) 
+
+  
 
 @socketio.on('message')
 def handleMessage(msg):
