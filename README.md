@@ -1,2 +1,2 @@
 # TwitchLeaderboard
-Creating a way to make a leaderboard of different follower analytics for a streamer's users that a streamer on Twitch can display and see update in real time. 
+Creating a leaderboard of a Twitch livestreamer's top chatters during their current livestream that updates in real time.
