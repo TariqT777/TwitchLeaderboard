@@ -1,3 +1,5 @@
+#On localhost:5000
+
 from flask import Flask,make_response,request, render_template
 from flask_socketio import SocketIO,send
 import socket
@@ -6,7 +8,7 @@ server = 'irc.chat.twitch.tv'
 port = 6667
 nickname = 'doctor_remarkable'
 token = 'oauth:qai92v51z01253epp7cpacy833uljy'
-channel = '#thejrm_'
+channel = '#puppers'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
@@ -50,6 +52,7 @@ def joinchat():
                    # This yield is giving data to display one entry into the dictionary at a time. For fast chats (i.e chats with a lot of people talking at one time, yield only printing one entry at a time become increasingly slow and less accurate to real time.)
                     yield list(nameItems)[0:10] 
                 dictEntries += 1
+        #yield list(nameItems)[0:10]
         #print(dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True)))
 
 winner = joinchat()
