@@ -8,7 +8,7 @@ server = 'irc.chat.twitch.tv'
 port = 6667
 nickname = 'doctor_remarkable'
 token = 'oauth:qai92v51z01253epp7cpacy833uljy'
-channel = '#puppers'
+channel = '#otzdarva'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
@@ -49,8 +49,8 @@ def joinchat():
                 sortDict = dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True))
                 nameItems = sortDict.items()
                 if dictEntries % 4 == 0: #This allows more entries to be stored in dictionary before printing to the client's screen.
-                   # This yield is giving data to display one entry into the dictionary at a time. For fast chats (i.e chats with a lot of people talking at one time, yield only printing one entry at a time become increasingly slow and less accurate to real time.)
-                    yield list(nameItems)[0:10] 
+                   # This yield is giving data to display one entry into the dictionary at a time. For fast chats (i.e chats with a lot of people talking at one time, yield only printing one entry at a time becomes increasingly slow and less accurate to real time.)
+                    yield list(nameItems)[0:10]
                 dictEntries += 1
         #yield list(nameItems)[0:10]
         #print(dict(sorted(dictOfNames.items(), key=lambda item: item[1],reverse=True)))
@@ -73,7 +73,7 @@ def printData(data):
 '''
 @app.route('/')
 def Index():
-    return render_template('index.html', channelName = channel, data = next(winner)) 
+    return render_template('index.html', channelName = channel.strip('#').title(), data = next(winner)) 
 
   
 
